@@ -10,17 +10,15 @@
     <table style="text-align: left;">
      <thead>
       <tr>
-       <th style="width:350px">Zeit</th>
-       <th style="width:150px">Von</th>
-       <th style="width:150px">Nach</th>
+       <th style="width:100px">Stunde</th>
+       <th style="width:100px">Anzahl</th>
       </tr>
      </thead>
      <tbody>
       <% queryResult.forEach(function(result) { %>
         <tr>
-	 <td><%= result.callDate %></td>
-	 <td><%= result.fromNumber %></td>
-	 <td><%= result.toNumber %></td>
+	 <td><%= result._id %></td>
+	 <td><%= result.count %></td>
         </tr>
       <% }); %>
      </tbody>
