@@ -1,13 +1,14 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <title>Cisco Call Log</title>
-    <link rel='stylesheet' href='/stylesheets/style.css' />
-  </head>
+  <%- include partial/head.ejs %>
   <body>
-    <h1>Cisco Call Log</h1>
-    <%- include partial/menu.ejs %>
-    <table style="text-align: left;">
+    <%- include partial/header.ejs %>
+    <div class="ui grid">
+      <div class="two wide column">
+        <%- include partial/menu.ejs %>
+      </div>
+      <div class="eight wide column">
+    <table class="ui celled table">
      <thead>
       <tr>
        <th style="width:350px">Zeit</th>
@@ -25,5 +26,6 @@
       <% }); %>
      </tbody>
     </table>
+      </div>
   </body>
 </html>
