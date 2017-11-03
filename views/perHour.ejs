@@ -17,7 +17,7 @@
      <tbody>
       <% queryResult.forEach(function(result) { %>
         <tr>
-	 <td><%= result._id %></td>
+	 <td><%= numeral(result._id).format('00') %></td>
 	 <td><%= result.count %></td>
         </tr>
       <% }); %>
