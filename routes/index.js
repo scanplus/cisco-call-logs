@@ -12,7 +12,6 @@ router.get('/', function(req, res, next) {
     var query = CallLog.find().sort({callDate: -1}).limit(20);
     query.exec(function(err, queryResult) {
       if (err) console.log(err);
-      console.log(queryResult);
       res.render('index', { queryResult: queryResult });
     });
   });
