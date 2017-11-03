@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Cisco Call Log</title>
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+  </head>
+  <body>
+    <h1>Cisco Call Log</h1>
+    <table style="text-align: left;">
+     <thead>
+      <tr>
+       <th style="width:350px">Zeit</th>
+       <th style="width:150px">Von</th>
+       <th style="width:150px">Nach</th>
+      </tr>
+     </thead>
+     <tbody>
+      <% queryResult.forEach(function(result) { %>
+        <tr>
+	 <td><%= result.callDate %></td>
+	 <td><%= result.fromNumber %></td>
+	 <td><%= result.toNumber %></td>
+        </tr>
+      <% }); %>
+     </tbody>
+    </table>
+  </body>
+</html>
