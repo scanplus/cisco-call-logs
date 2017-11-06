@@ -3,6 +3,7 @@ module.exports = function(mongoose, db) {
     fromNumber: String,
     toNumber: String,
     callDate: Date,
+    tzOffset: Number,
     transformedCgpn: String,
     transformedCdpn: String
   });
