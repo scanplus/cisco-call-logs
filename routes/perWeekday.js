@@ -5,13 +5,13 @@ var callLogModel = require('../database/CallLog-model.js');
 var mongoose = require('mongoose');
 
 var weekdays = new Array(7);
-weekdays[0] = "Sunday";
-weekdays[1] = "Monday";
-weekdays[2] = "Tuesday";
-weekdays[3] = "Wednesday";
-weekdays[4] = "Thursday";
-weekdays[5] = "Friday";
-weekdays[6] = "Saturday";
+weekdays[0] = "Sonntag";
+weekdays[1] = "Montag";
+weekdays[2] = "Dienstag";
+weekdays[3] = "Mittwoch";
+weekdays[4] = "Donnerstag";
+weekdays[5] = "Freitag";
+weekdays[6] = "Samstag";
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
