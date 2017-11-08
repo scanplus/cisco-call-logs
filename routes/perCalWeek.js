@@ -34,17 +34,23 @@ function getWeekNumber(d) {
 }
 
 router.get('/', function(req, res, next) {
-  var week = getWeekNumber(new Date());
-  res.redirect('/perCalWeek/' + week[0] + '/' + week[1]);
+  var weekNum = getWeekNumber(new Date());
+  res.redirect('/perCalWeek/' + weekNum[0] + '/' + weekNum[1]);
 });
 
 router.get('/:year/:week', function(req, res, next) {
   console.log("Week: " + req.params.week);
   var db = dbConn();
+
+  var year = parseInt(req.params.year);
+  var week = parseInt(req.params.week);
+  if(Number.isNaN(year) || Number.isNaN(week)) {
+    var weekNum = getWeekNumber(new Date());
+    res.redirect('/perCalWeek/' + weekNum[0] + '/' + weekNum[1]);
+  }
+
   db.once('open', function() {
     var CallLog = callLogModel(mongoose, db);
-    var year = parseInt(req.params.year);
-    var week = parseInt(req.params.week);
 
     var weekStart = getDateOfISOWeek(week, year);
     var weekEnd = getDateOfISOWeek(week, year);
