@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+  <%- include partial/head.ejs %>
+  <body>
+    <%- include partial/header.ejs %>
+    <div class="ui grid">
+      <div class="two wide column">
+        <%- include partial/menu.ejs %>
+      </div>
+      <div class="eight wide column">
+        <h2 class="ui header">Kalenderwoche <%= week%>/<%= year %></h2>
+        <table class="ui celled table">
+         <thead>
+          <tr>
+           <th style="width:100px">Wochentag</th>
+           <th style="width:100px">Anzahl</th>
+          </tr>
+         </thead>
+         <tbody>
+          <% queryResult.forEach(function(result) { %>
+            <tr>
+              <td><%= weekdays[result._id - 1] %></td>
+              <td><%= result.count %></td>
+            </tr>
+          <% }); %>
+         </tbody>
+        </table>
+      </div>
+  </body>
+</html>
