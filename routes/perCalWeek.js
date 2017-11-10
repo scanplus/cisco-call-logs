@@ -39,7 +39,6 @@ router.get('/', function(req, res, next) {
 });
 
 router.get('/:year/:week', function(req, res, next) {
-  console.log("Week: " + req.params.week);
   var db = dbConn();
 
   var year = parseInt(req.params.year);

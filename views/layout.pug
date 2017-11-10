@@ -1,0 +1,18 @@
+doctype html
+html
+  head
+    title Cisco Call Log
+    link(href='/stylesheets/semantic.min.css', rel='stylesheet')
+    link(href='/stylesheets/style.css', rel='stylesheet')
+    script(src='https://code.jquery.com/jquery-3.1.1.min.js',
+        integrity='sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8=',
+        crossorigin='anonymous'
+    )
+    script(src='/javascripts/semantic.min.js')
+  body
+    h1.ui.header(style='margin-top:10px;margin-left:10px;') Cisco Call Log
+    div.ui.grid
+      div.two.wide.column
+        include menu.pug
+      div.eight.wide.column
+        block content

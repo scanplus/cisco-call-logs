@@ -1,0 +1,14 @@
+extends layout.pug
+
+block content
+  h2.ui.header Kalenderwoche #{week}/#{year}
+  table.ui.celled.table
+    thead
+      tr
+        th(style='width:100px') Wochentag
+        th(style='width:100px') Anzahl
+    tbody
+      each val in queryResult
+        tr
+          td #{weekdays[val._id - 1 ]}
+          td #{val.count}

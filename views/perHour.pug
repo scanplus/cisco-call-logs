@@ -1,0 +1,13 @@
+extends layout.pug
+
+block content
+  table.ui.celled.table
+    thead
+      tr
+        th(style='width:100px') Stunde
+        th(style='width:100px') Anzahl
+    tbody
+      each val in queryResult
+        tr
+          td #{numeral(val._id).format('00')}
+          td #{val.count}
