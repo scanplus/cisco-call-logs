@@ -4,16 +4,45 @@ var dbConn = require('../database/mongo-connection.js');
 var callLogModel = require('../database/CallLog-model.js');
 var mongoose = require('mongoose');
 
-/* GET home page. */
-router.get('/', function(req, res, next) {
+
+function loadCalls(filter, callback) {
   var db = dbConn();
+  queryFilter = {};
+  if(filter === 'ext') {
+    queryFilter = {
+      fromNumber: { $regex: /\+.*/ }
+    }
+  } else if(filter === 'int') {
+    queryFilter = {
+      fromNumber: { $regex: /^\d\d\d|^\d\d\d\d/ }
+    }
+  }
   db.once('open', function() {
     var CallLog = callLogModel(mongoose, db);
-    var query = CallLog.find().sort({callDate: -1}).limit(20);
+    var query = CallLog.find(queryFilter).sort({callDate: -1}).limit(20);
+
     query.exec(function(err, queryResult) {
-      if (err) console.log(err);
-      res.render('index', { queryResult: queryResult });
+      if (err) console.log(err, null);
+      callback(null, queryResult);
     });
+  });
+}
+
+router.get('/', function(req, res, next) {
+  loadCalls('', function(err, queryResult) {
+    res.render('index', { queryResult: queryResult });
+  });
+});
+
+router.get('/ext', function(req, res, next) {
+  loadCalls('ext', function(err, queryResult) {
+    res.render('index', { queryResult: queryResult });
+  });
+});
+
+router.get('/int', function(req, res, next) {
+  loadCalls('int', function(err, queryResult) {
+    res.render('index', { queryResult: queryResult });
   });
 });
 
