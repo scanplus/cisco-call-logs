@@ -43,7 +43,13 @@ router.post('/', function(req, res, next) {
       res.render('login', { state: state });
     } else {
       req.session.authenticated = true;
-      res.redirect('/');
+      if(req.session.prevPath) {
+        let target = req.session.prevPath;
+        req.session.prevPath = null;
+        res.redirect(target);
+      } else {
+        res.redirect('/');
+      }
     }
   });
 });
