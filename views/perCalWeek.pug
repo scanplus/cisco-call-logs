@@ -1,7 +1,7 @@
 extends layout
 
 block content
-  h2.ui.header Kalenderwoche #{week}/#{year}
+  h2.ui.header Kalenderwoche #{week.week}/#{week.year}
   table.ui.celled.table
     thead
       tr
@@ -12,3 +12,10 @@ block content
         tr
           td #{weekdays[val._id - 1 ]}
           td #{val.count}
+  div.ui.items
+    div.item
+      div.extra
+        a(href='/perCalWeek/' + pWeek.year + '/' + pWeek.week + '/' + filter)
+          div.ui.button Vorherige
+        a(href='/perCalWeek/' + nWeek.year + '/' + nWeek.week + '/' + filter)
+          div.ui.right.floated.button Nächste

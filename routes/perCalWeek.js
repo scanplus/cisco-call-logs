@@ -30,45 +30,68 @@ function getWeekNumber(d) {
     d.setUTCDate(d.getUTCDate() + 4 - (d.getUTCDay()||7));
     var yearStart = new Date(Date.UTC(d.getUTCFullYear(),0,1));
     var weekNo = Math.ceil(( ( (d - yearStart) / 86400000) + 1)/7);
-    return [d.getUTCFullYear(), weekNo];
+    return { year: d.getUTCFullYear(), week: weekNo };
+}
+
+function getNextWeek(week) {
+  let d = getDateOfISOWeek(week.week, week.year);
+  d.setDate(d.getDate() + 7);
+  return getWeekNumber(d);
+}
+
+function getPrevWeek(week) {
+  let d = getDateOfISOWeek(week.week, week.year);
+  d.setDate(d.getDate() - 7);
+  return getWeekNumber(d);
 }
 
 router.get('/', function(req, res, next) {
   var weekNum = getWeekNumber(new Date());
-  res.redirect('/perCalWeek/' + weekNum[0] + '/' + weekNum[1]);
+  res.redirect('/perCalWeek/' + weekNum.year + '/' + weekNum.week);
 });
 
-router.get('/:year/:week', function(req, res, next) {
-  var db = dbConn();
+router.get('/ext', function(req, res, next) {
+  var weekNum = getWeekNumber(new Date());
+  res.redirect('/perCalWeek/' + weekNum.year + '/' + weekNum.week + '/ext');
+});
 
-  var year = parseInt(req.params.year);
-  var week = parseInt(req.params.week);
-  if(Number.isNaN(year) || Number.isNaN(week)) {
-    var weekNum = getWeekNumber(new Date());
-    res.redirect('/perCalWeek/' + weekNum[0] + '/' + weekNum[1]);
+router.get('/int', function(req, res, next) {
+  var weekNum = getWeekNumber(new Date());
+  res.redirect('/perCalWeek/' + weekNum.year + '/' + weekNum.week + '/int');
+});
+
+function loadCalls(filter, week, callback) {
+  var db = dbConn();
+  queryFilter = {};
+  if(filter === 'ext') {
+    queryFilter = {
+      fromNumber: { $regex: /\+.*/ }
+    }
+  } else if(filter === 'int') {
+    queryFilter = {
+      fromNumber: { $regex: /^\d\d\d|^\d\d\d\d/ }
+    }
+  }
+  var weekStart = getDateOfISOWeek(week.week, week.year);
+  var weekEnd = getDateOfISOWeek(week.week, week.year);
+  weekEnd.setDate(weekEnd.getDate() + 7);
+  queryFilter.callDate = {
+    $lte: weekEnd,
+    $gte: weekStart
   }
 
   db.once('open', function() {
     var CallLog = callLogModel(mongoose, db);
-
-    var weekStart = getDateOfISOWeek(week, year);
-    var weekEnd = getDateOfISOWeek(week, year);
-    weekEnd.setDate(weekEnd.getDate() + 7);
     var query = CallLog.aggregate([
       {
-        $match: {
-          callDate: {
-            $lte: weekEnd,
-            $gte: weekStart
-          }
-        }
+        $match: queryFilter
       }, {
         $project: {
           weekDay: {$dayOfWeek: "$callDate"}
         }
       }, {
         $group: {
-          _id: "$weekDay" ,
+          _id: "$weekDay",
           count: { $sum: 1 }
         }
       }, {
@@ -79,9 +102,55 @@ router.get('/:year/:week', function(req, res, next) {
     ]);
 
     query.exec(function(err, queryResult) {
-      if (err) console.log(err);
-      res.render('perCalWeek', { session: req.session, queryResult: queryResult, weekdays: weekdays, week: week, year: year });
+      if (err) console.log(err, null);
+      callback(null, queryResult);
     });
+  });
+}
+
+function checkParams(req, res, filter) {
+  var year = parseInt(req.params.year);
+  var week = parseInt(req.params.week);
+  if(Number.isNaN(year) || Number.isNaN(week)) {
+    var weekNum = getWeekNumber(new Date());
+    res.redirect('/perCalWeek/' + weekNum.year + '/' + weekNum.week + '/' + filter);
+  }
+  return { year: year, week: week };
+}
+
+function buildRenderObject(session, queryResult, week, filter) {
+  return  {
+    session: session,
+    queryResult: queryResult,
+    weekdays: weekdays,
+    week: week,
+    nWeek: getNextWeek(week),
+    pWeek: getPrevWeek(week),
+    filter: filter
+  }
+}
+
+router.get('/:year/:week', function(req, res, next) {
+  let week = checkParams(req, res, '');
+  loadCalls('', week, function(err, queryResult) {
+    let renderObject = buildRenderObject(req.session, queryResult, week, '');
+    res.render('perCalWeek', renderObject);
+  });
+});
+
+router.get('/:year/:week/ext', function(req, res, next) {
+  let week = checkParams(req, res, 'ext');
+  loadCalls('ext', week, function(err, queryResult) {
+    let renderObject = buildRenderObject(req.session, queryResult, week, 'ext');
+    res.render('perCalWeek', renderObject);
+  });
+});
+
+router.get('/:year/:week/int', function(req, res, next) {
+  let week = checkParams(req, res, 'int');
+  loadCalls('int', week, function(err, queryResult) {
+    let renderObject = buildRenderObject(req.session, queryResult, week, 'int');
+    res.render('perCalWeek', renderObject);
   });
 });
 
