@@ -80,7 +80,7 @@ router.get('/:year/:week', function(req, res, next) {
 
     query.exec(function(err, queryResult) {
       if (err) console.log(err);
-      res.render('perCalWeek', { queryResult: queryResult, weekdays: weekdays, week: week, year: year });
+      res.render('perCalWeek', { session: req.session, queryResult: queryResult, weekdays: weekdays, week: week, year: year });
     });
   });
 });

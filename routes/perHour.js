@@ -29,7 +29,7 @@ router.get('/', function(req, res, next) {
 
     query.exec(function(err, queryResult) {
       if (err) console.log(err);
-      res.render('perHour', { queryResult: queryResult, numeral: numeral });
+      res.render('perHour', { session: req.session, queryResult: queryResult, numeral: numeral });
     });
   });
 });

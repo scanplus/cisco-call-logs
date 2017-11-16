@@ -20,3 +20,8 @@ div.ui.vertical.menu
       a.item(href='/perHour') Pro Stunde
       a.item(href='/perWeekday') Pro Wochentag
       a.item(href='/perCalWeek/') Pro Kalenderwoche
+  if session && session.authenticated
+    div.item
+      div.header Benutzer
+      div.menu
+        a.item(href='/Logout') Logout

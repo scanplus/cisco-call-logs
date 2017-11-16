@@ -31,21 +31,21 @@ function loadCalls(filter, callback) {
 router.get('/', function(req, res, next) {
   loadCalls('', function(err, queryResult) {
     if (err) console.log(err);
-    res.render('index', { queryResult: queryResult });
+    res.render('index', { session: req.session, queryResult: queryResult });
   });
 });
 
 router.get('/ext', function(req, res, next) {
   loadCalls('ext', function(err, queryResult) {
     if (err) console.log(err);
-    res.render('index', { queryResult: queryResult });
+    res.render('index', { session: req.session, queryResult: queryResult });
   });
 });
 
 router.get('/int', function(req, res, next) {
   loadCalls('int', function(err, queryResult) {
     if (err) console.log(err);
-    res.render('index', { queryResult: queryResult });
+    res.render('index', { session: req.session, queryResult: queryResult });
   });
 });
 

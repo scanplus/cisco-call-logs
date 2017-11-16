@@ -1,0 +1,13 @@
+extends layout
+
+block content
+  form.ui.form(method='POST')
+    div.field
+      label Benutzername
+      input(type='text', name='username', placeholder='Benutzername')
+    div.field
+      label Passwort
+      input(type='password', name='password')
+    button.ui.button Login
+    if state && !state.success
+      div.ui.message #{state.errMessage}

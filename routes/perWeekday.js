@@ -37,7 +37,7 @@ router.get('/', function(req, res, next) {
 
     query.exec(function(err, queryResult) {
       if (err) console.log(err);
-      res.render('perWeekday', { queryResult: queryResult, weekdays: weekdays });
+      res.render('perWeekday', { session: req.session, queryResult: queryResult, weekdays: weekdays });
     });
   });
 });
