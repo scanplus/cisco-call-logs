@@ -10,6 +10,25 @@ function checkConfiguration() {
      typeof process.env.AD_GROUP === 'string')
 }
 
+function buildLdapClient(address) {
+  let ldapURL = '';
+  if(address.port === 636) {
+    ldapURL = 'ldaps://' + address.name + ':' + address.port;
+  } else {
+    ldapURL = 'ldap://' + address.name + ':' + address.port;
+  }
+  let ldapClient = ldap.createClient({
+    url: ldapURL,
+    tlsOptions: {
+      rejectUnauthorized: false,
+      checkServerIdentity: function(servername, cert) {
+        return undefined;
+      }
+    }
+  });
+  return ldapClient;
+}
+
 module.exports = function checkLogin(user, pass, callback) {
   if(!checkConfiguration()) {
     let err = new Error('Missing domain configuration');
@@ -23,34 +42,25 @@ module.exports = function checkLogin(user, pass, callback) {
       callback(err, null);
       return;
     }
+
     let dcFound = false;
     let calledBack = false;
+    let errorCount = 0;
     addresses.forEach(function(address) {
       if(dcFound || calledBack) {
         return;
       }
-      let ldapURL = '';
-      if(address.port === 636) {
-        ldapURL = 'ldaps://' + address.name + ':' + address.port;
-      } else {
-        ldapURL = 'ldap://' + address.name + ':' + address.port;
-      }
-      let ldapClient = ldap.createClient({
-        url: ldapURL,
-        tlsOptions: {
-          rejectUnauthorized: false,
-          checkServerIdentity: function(servername, cert) {
-            return undefined;
-          }
-        }
-      });
+      let ldapClient = buildLdapClient(address);
       ldapClient.on('error', function(err) {
+        errorCount++;
         if(dcFound || calledBack) {
           return;
         }
         console.log('ldapClient on error: ' + err);
-        callback(err, null);
-        calledBack = true;
+        if(errorCount === addresses.length) {
+          callback(err, null);
+          calledBack = true;
+        }
       });
 
       ldapClient.bind(user, pass, function(err) {
@@ -67,8 +77,11 @@ module.exports = function checkLogin(user, pass, callback) {
             calledBack = true;
             return;
           }
-          callback(err, null);
-          calledBack = true;
+          errorCount++;
+          if(errorCount === addresses.length) {
+            callback(err, null);
+            calledBack = true;
+          }
           return;
         }
         dcFound = true;
