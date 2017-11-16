@@ -36,6 +36,7 @@ router.post('/', function(req, res, next) {
       console.log(err);
       state.errMessage = err;
       res.render('login', { state: state });
+      return;
     }
     if(!loginRes) {
       state.errMessage = 'Benutzername oder Passwort falsch';

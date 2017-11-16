@@ -24,8 +24,9 @@ module.exports = function checkLogin(user, pass, callback) {
       return;
     }
     let dcFound = false;
+    let calledBack = false;
     addresses.forEach(function(address) {
-      if(dcFound) {
+      if(dcFound || calledBack) {
         return;
       }
       let ldapURL = '';
@@ -44,27 +45,30 @@ module.exports = function checkLogin(user, pass, callback) {
         }
       });
       ldapClient.on('error', function(err) {
-        if(dcFound) {
+        if(dcFound || calledBack) {
           return;
         }
-        console.log(err);
+        console.log('ldapClient on error: ' + err);
         callback(err, null);
+        calledBack = true;
       });
 
       ldapClient.bind(user, pass, function(err) {
-        if(dcFound) {
+        if(dcFound || calledBack) {
           return;
         }
         if(err) {
-          if(dcFound) {
+          if(dcFound || calledBack) {
             return;
           }
           if(_.includes(err.lde_message, 'AcceptSecurityContext')) {
             dcFound = true;
             callback(null, false);
+            calledBack = true;
             return;
           }
           callback(err, null);
+          calledBack = true;
           return;
         }
         dcFound = true;
@@ -84,6 +88,7 @@ function checkIfInGroup(ldapClient, userName, groupName, callback) {
     ]
   }, function(err, res) {
     let found = false;
+    let calledBack = false;
     res.on('searchEntry', function(entry) {
       let inGroup = false;
       entry.attributes.forEach(function(attr) {
@@ -94,15 +99,22 @@ function checkIfInGroup(ldapClient, userName, groupName, callback) {
         });
       });
       found = true;
-      callback(null, inGroup);
+      if(!calledBack) {
+        callback(null, inGroup);
+      }
+      calledBack = true;
     });
     res.on('error', function(err) {
-      callback(err, null);
+      if(!calledBack) {
+        callback(err, null);
+        calledBack = true;
+      }
       ldapClient.unbind();
     });
     res.on('end', function(result) {
-      if(!found) {
+      if(!found && !calledBack) {
         callback(null, false);
+        calledBack = true;
       }
       ldapClient.unbind();
     });
