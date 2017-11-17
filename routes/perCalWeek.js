@@ -119,7 +119,7 @@ function checkParams(req, res, filter) {
 }
 
 function buildRenderObject(session, queryResult, week, filter) {
-  return  {
+  return {
     session: session,
     queryResult: queryResult,
     weekdays: weekdays,
