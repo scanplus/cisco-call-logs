@@ -4,14 +4,15 @@ var dbConn = require('../database/mongo-connection.js');
 var callLogModel = require('../database/CallLog-model.js');
 var mongoose = require('mongoose');
 
-var weekdays = new Array(7);
-weekdays[0] = "Sonntag";
+var weekdays = new Array(8);
+weekdays[0] = "";
 weekdays[1] = "Montag";
 weekdays[2] = "Dienstag";
 weekdays[3] = "Mittwoch";
 weekdays[4] = "Donnerstag";
 weekdays[5] = "Freitag";
 weekdays[6] = "Samstag";
+weekdays[7] = "Sonntag";
 
 function getDateOfISOWeek(w, y) {
   var simple = new Date(y, 0, 1 + (w - 1) * 7);
@@ -87,7 +88,7 @@ function loadCalls(filter, week, callback) {
         $match: queryFilter
       }, {
         $project: {
-          weekDay: {$dayOfWeek: "$callDate"}
+          weekDay: { $isoDayOfWeek: "$callDate" }
         }
       }, {
         $group: {
