@@ -6,16 +6,16 @@
     "start": "node ./bin/www"
   },
   "dependencies": {
-    "body-parser": "~1.18.2",
-    "debug": "~3.1.0",
-    "express": "~4.16.2",
-    "express-session": "^1.15.6",
-    "ldapjs": "^1.0.1",
-    "lodash": "4.17.4",
-    "mongoose": "4.13.3",
-    "morgan": "~1.9.0",
+    "body-parser": "1.18.3",
+    "debug": "3.1.0",
+    "express": "4.16.3",
+    "express-session": "1.15.6",
+    "ldapjs": "1.0.2",
+    "lodash": "4.17.10",
+    "mongoose": "5.1.5",
+    "morgan": "1.9.0",
     "numeral": "2.0.6",
-    "pug": "^2.0.0-rc.4",
-    "serve-favicon": "~2.4.5"
+    "pug": "2.0.3",
+    "serve-favicon": "2.5.0"
   }
 }

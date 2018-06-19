@@ -18,8 +18,7 @@ function loadCalls(filter, callback) {
     }
   }
   db.once('open', function() {
-    var CallLog = callLogModel(mongoose, db);
-    var query = CallLog.find(queryFilter).sort({callDate: -1}).limit(20);
+    var query = callLogModel.find(queryFilter).sort({callDate: -1}).limit(20);
 
     query.exec(function(err, queryResult) {
       if (err) callback(err, null);

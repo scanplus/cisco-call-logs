@@ -22,7 +22,8 @@ module.exports = function() {
       connectionString = 'mongodb://' + mongoHost + '/' + mongoDb;
     }
 
-    mongoconnection = mongoose.createConnection(connectionString);
+    mongoose.connect(connectionString);
+    mongoconnection = mongoose.connection;
     mongoconnection.on('error', console.error.bind(console, 'connection error:'));
   }
   return mongoconnection;

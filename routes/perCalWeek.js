@@ -82,8 +82,7 @@ function loadCalls(filter, week, callback) {
   }
 
   db.once('open', function() {
-    var CallLog = callLogModel(mongoose, db);
-    var query = CallLog.aggregate([
+    var query = callLogModel.aggregate([
       {
         $match: queryFilter
       }, {
