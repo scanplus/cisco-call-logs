@@ -11,18 +11,15 @@ module.exports = function() {
 
     mongoose.Promise = global.Promise;
 
-    var connectionString = "";
+    var connectionOptions = {};
+    var connectionString = 'mongodb://' + mongoHost + '/' + mongoDb;
     if(typeof process.env.MONGO_USER === 'string' &&
        typeof process.env.MONGO_PASS === 'string') {
-      var mongoUser = _.trim(process.env.MONGO_USER);
-      var mongoPass = _.trim(process.env.MONGO_PASS);
-      connectionString = 'mongodb://' + mongoUser + ':' +
-      mongoPass + '@' + mongoHost + '/' + mongoDb;
-    } else {
-      connectionString = 'mongodb://' + mongoHost + '/' + mongoDb;
+      connectionOptions.user = _.trim(process.env.MONGO_USER);
+      connectionOptions.pass = _.trim(process.env.MONGO_PASS);
     }
 
-    mongoose.connect(connectionString);
+    mongoose.connect(connectionString, connectionOptions);
     mongoconnection = mongoose.connection;
     mongoconnection.on('error', console.error.bind(console, 'connection error:'));
   }

@@ -32,7 +32,7 @@ function loadCalls(filter, callback) {
         $match: queryFilter
       }, {
         $project: {
-          weekDay: { $isoDayOfWeek: "$callDate" }
+          weekDay: {$isoDayOfWeek: {date: "$callDate", timezone: 'Europe/Berlin'}}
         }
       }, {
         $group: {

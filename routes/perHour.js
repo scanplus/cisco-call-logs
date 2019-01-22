@@ -23,7 +23,7 @@ function loadCalls(filter, callback) {
         $match: queryFilter
       }, {
         $project: {
-          hour: {$hour: "$callDate"}
+          hour: {$hour: {date: "$callDate", timezone: 'Europe/Berlin'}}
         }
       }, {
         $group: {
