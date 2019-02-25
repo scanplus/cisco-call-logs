@@ -12,7 +12,7 @@
     "express-session": "1.15.6",
     "ldapjs": "1.0.2",
     "lodash": "4.17.11",
-    "mongoose": "5.4.2",
+    "mongoose": "5.4.15",
     "morgan": "1.9.1",
     "numeral": "2.0.6",
     "pug": "2.0.3",
