@@ -12,6 +12,7 @@ var logout = require('./routes/logout');
 var perHour = require('./routes/perHour');
 var perWeekday = require('./routes/perWeekday');
 var perCalWeek = require('./routes/perCalWeek');
+var search = require('./routes/search');
 
 var app = express();
 
@@ -35,6 +36,7 @@ app.use('/logout', logout);
 app.use(requiresLogin);
 
 app.use('/', index);
+app.use('/search', search);
 app.use('/perHour', perHour);
 app.use('/perWeekday', perWeekday);
 app.use('/perCalWeek/', perCalWeek);

@@ -1,0 +1,29 @@
+extends layout
+
+block content
+  form.ui.form(method='POST')
+    div.field
+      label Anrufer
+      input(type='text', name='fromNumber', placeholder='Anrufer', value=fromNumber ? fromNumber : "")
+    div.field
+      label Angerufener
+      input(type='text', name='toNumber', placeholder='Angerufener', value=toNumber ? toNumber : "")
+    button.ui.button Suchen
+    if state && !state.success
+      div.ui.message #{state.errMessage}
+  if queryResult
+    table.ui.celled.table
+      thead
+        tr
+          th(style='width:250px') Zeit
+          th(style='width:130px') Von
+          th(style='width:130px') Nach
+      tbody
+        each val in queryResult
+          tr
+            td #{val.callDate}
+            td #{val.fromNumber}
+            td #{val.toNumber}
+        else
+          tr
+            td(colspan=3) Keine Ergebnisse 
