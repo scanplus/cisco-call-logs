@@ -35,7 +35,6 @@ module.exports = function checkLogin(user, pass, callback) {
     callback(err, null);
     return;
   }
-  user = user + '@' + process.env.AD_DOMAIN;
   // find Domain controllers
   dns.resolve(serviceName + '.' + _.trim(process.env.AD_DOMAIN), 'SRV', function(err, addresses) {
     if(err) {
