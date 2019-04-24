@@ -11,7 +11,7 @@ module.exports = function() {
 
     mongoose.Promise = global.Promise;
 
-    var connectionOptions = {};
+    var connectionOptions = { useNewUrlParser: true };
     var connectionString = 'mongodb://' + mongoHost + '/' + mongoDb;
     if(typeof process.env.MONGO_USER === 'string' &&
        typeof process.env.MONGO_PASS === 'string') {
