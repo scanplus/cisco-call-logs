@@ -21,6 +21,7 @@ function loadCalls(fromNumber, toNumber, callback) {
     query.exec(function(err, queryResult) {
       if (err) callback(err, null);
       callback(null, queryResult);
+      db.close();
     });
   });
 }

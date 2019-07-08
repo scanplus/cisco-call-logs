@@ -23,6 +23,7 @@ function loadCalls(filter, callback) {
     query.exec(function(err, queryResult) {
       if (err) callback(err, null);
       callback(null, queryResult);
+      db.close();
     });
   });
 }

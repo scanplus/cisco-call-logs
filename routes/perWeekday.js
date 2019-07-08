@@ -49,6 +49,7 @@ function loadCalls(filter, callback) {
     query.exec(function(err, queryResult) {
       if (err) console.log(err, null);
       callback(null, queryResult);
+      db.close();
     });
   });
 }
